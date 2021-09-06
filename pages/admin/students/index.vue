@@ -58,7 +58,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import StudentTable from "../../../components/classes/StudentTable.vue";
+import StudentTable from "../../../components/students/StudentTable.vue";
 import Loader from '../../../components/generic/Loader.vue';
 import BreadCrumb from "../../../components/navs/BreadCrumb.vue";
 import TopNavBar from "../../../components/navs/TopNavBar.vue";

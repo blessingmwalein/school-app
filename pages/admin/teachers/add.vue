@@ -82,13 +82,18 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label">Phone  Number</label>
-                <input
-                  type="text"
-                  v-model="teacher.phone_number"
-                  placeholder="Phone Number"
-                  class="form-control"
-                />
+                <label class="form-label">Phone Number</label>
+
+                <vue-tel-input v-model="teacher.phone_number" @input="changeTel"></vue-tel-input>
+
+                <div v-if="!phoneNumberValid">
+                  <div
+                    class="invalid-feedback"
+
+                  >
+                    Please Enter Valid Phone Number
+                  </div>
+                </div>
                 <div v-if="errors.phone_number">
                   <div
                     class="invalid-feedback"
@@ -183,6 +188,7 @@ export default {
   data() {
     return {
       teacher: {},
+      phoneNumberValid:false
     };
   },
   created() {
@@ -203,6 +209,14 @@ export default {
     submitForm() {
       this.saveNewTeacher(this.teacher);
     },
+
+    changeTel(number, phone){
+      console.log(phone);
+      this.teacher.phone_number = phone.number
+      this.phoneNumberValid = phone.valid == undefined ? false : phone.valid
+      console.log(this.phoneNumberValid);
+    },
+
   },
 };
 </script>

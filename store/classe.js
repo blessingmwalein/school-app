@@ -6,12 +6,16 @@ export const state = () => ({
   errors: {},
   message: "",
   classe: {},
-  baseImageUrl: 'http://127.0.0.1:8000/storage/classe/'
+  baseImageUrl: 'http://127.0.0.1:8000/storage/classe/',
+  students:{}
 })
 
 export const getters = {
   getClasses: state => {
     return state.classes
+  },
+  getStudents: state => {
+    return state.students
   },
   getImageBaseUrl: state => {
     return state.baseImageUrl
@@ -47,6 +51,10 @@ export const mutations = {
     state.classes = classes;
     state.loading = false
   },
+  setStudents(state, students) {
+    state.students = students;
+    state.loading = false
+  },
 
   setClasse(state, classe) {
     state.loading = false;
@@ -56,21 +64,35 @@ export const mutations = {
   error(state, error) {
     state.loading = false;
     state.loadingSave = false
-    console.log(error);
+    console.log(error.response.status);
 
-    if (error.response.status == 422) {
-      state.errors = error.response.data.errors
-      state.message = error.response.data.message
+    if(error.response.status===422){
+      state.message =error.response.data.message
+      error.response.data.errors ? state.errors = error.response.data.errors:""
     }
+    // if (error.response.status == 422) {
+    //   state.message = error.response.data.message
+    // }
   },
 
   success(state, data) {
     state.loadingSave = false;
     state.errors={};
     state.message=""
-    succesAlert(`${data.data.name}!`, `Record Updated Success`);
+    console.log(data);
+    succesAlert(``, `Record Updated Success`);
     this.$router.push(`/admin/classes`)
   },
+
+  successAddStudent(state, data){
+    state.loadingSave = false;
+    state.errors={};
+    state.message=""
+    console.log(data);
+    succesAlert(``, `Student Added To Class`);
+    this.$router.push(`/admin/classes/${data}`)
+  },
+
   saveLoadingState(state) {
     state.loadingSave = true
   },
@@ -99,6 +121,17 @@ export const actions = {
       this.$axios.setToken(this.$cookies.get('token'), 'Bearer');
       const data = await this.$axios.post('/classes/store', classe);
       commit('success',  data.data)
+    } catch (error) {
+      commit('error', error)
+    }
+  },
+
+  async addStudentClass({ commit }, studentClass) {
+    commit('saveLoadingState')
+    try {
+      this.$axios.setToken(this.$cookies.get('token'), 'Bearer');
+      const data = await this.$axios.post('student-classes', {class_id:studentClass.class_id,student_id:studentClass.student_id});
+      commit('successAddStudent',studentClass.class_id  )
     } catch (error) {
       commit('error', error)
     }
@@ -135,6 +168,17 @@ export const actions = {
     } catch (error) {
       commit('error', error)
     }
-  }
+  },
+
+  async getStudents({ commit }, query) {
+    // commit('setLoading');
+    try {
+      this.$axios.setToken(this.$cookies.get('token'), 'Bearer');
+      const data = await this.$axios.$get(`search/students?query=${query}`);
+      commit('setStudents', data)
+    } catch (error) {
+      commit('error', error)
+    }
+  },
 }
 

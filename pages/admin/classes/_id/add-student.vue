@@ -3,15 +3,19 @@
     <top-nav-bar></top-nav-bar>
 
     <bread-crumb
-      :name="'Add Student'"
-      :links="[{ name: 'Add New Student', link: '#' }]"
+      v-if="!loading"
+      :name="'Add Student To Class'"
+      :links="[
+        { name: `Classes`, link: '/admin/classes' },
+        { name: `${classe.name}`, link: '#' },
+      ]"
     ></bread-crumb>
-    <div class="page-section border-bottom-2">
+    <div class="page-section border-bottom-2" v-if="!loading">
       <div class="container page__container">
         <div class="row align-items-start">
           <div class="col-md-8">
             <div class="page-separator">
-              <div class="page-separator__text">Student Details</div>
+              <div class="page-separator__text">Class Details</div>
             </div>
             <div class="card card-body">
               <div class="alert alert-danger" role="alert" v-if="message">
@@ -26,97 +30,37 @@
                   </div>
                 </div>
               </div>
-
               <div class="form-group">
-                <label class="form-label">First Name</label>
+                <label class="form-label">Student</label>
+
+                <v-select :options="students.data" :label="'enrollment_number'" @input="setSelected"  @search="getStudentsAction" :filterable="false"></v-select>
+                <div v-if="errors.student_id">
+                  <div
+                    class="invalid-feedback"
+                    v-for="(error, index) in errors.student_id"
+                    :key="index"
+                  >
+                    {{ error }}
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Class Name</label>
                 <input
                   type="text"
-                  v-model="student.first_name"
-                  placeholder="First Name"
+                  v-model="classe.name"
+                  placeholder="Class Year"
                   class="form-control"
-                />
-                <div v-if="errors.first_name">
-                  <div
-                    class="invalid-feedback"
-                    v-for="(error, index) in errors.first_name"
-                    :key="index"
-                  >
-                    {{ error }}
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Last Name</label>
-                <input
-                  type="text"
-                  v-model="student.last_name"
-                  placeholder="Last Name"
-                  class="form-control"
-                />
-                <div v-if="errors.last_name">
-                  <div
-                    class="invalid-feedback"
-                    v-for="(error, index) in errors.last_name"
-                    :key="index"
-                  >
-                    {{ error }}
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Email</label>
-                <input
-                  type="text"
-                  v-model="student.email"
-                  placeholder="Email"
-                  class="form-control"
-                />
-                <div v-if="errors.email">
-                  <div
-                    class="invalid-feedback"
-                    v-for="(error, index) in errors.email"
-                    :key="index"
-                  >
-                    {{ error }}
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Phone Number</label>
-
-                <vue-tel-input v-model="student.phone_number" @input="changeTel"></vue-tel-input>
-
-                <div v-if="!phoneNumberValid">
-                  <div
-                    class="invalid-feedback"
-
-                  >
-                    Please Enter Valid Phone Number
-                  </div>
-                </div>
-                <div v-if="errors.phone_number">
-                  <div
-                    class="invalid-feedback"
-                    v-for="(error, index) in errors.phone_number"
-                    :key="index"
-                  >
-                    {{ error }}
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <button
-                  v-if="!loadingSave && phoneNumberValid"
-                  class="btn btn-secondary"
-                  @click.prevent="submitForm"
-                  >Add student</button
-                >
-                <button
-                  v-if="!loadingSave && !phoneNumberValid"
-                  class="btn btn-secondary"
                   disabled
-                  >Add student</button
+                />
+              </div>
+              <div>
+                <a
+                  href="#"
+                  v-if="!loadingSave"
+                  class="btn btn-outline-secondary"
+                  @click.prevent="submitForm"
+                  >Add Student To Class</a
                 >
                 <a
                   href="#"
@@ -130,7 +74,7 @@
           <div class="col-md-4">
             <div class="card">
               <div class="card-header text-right">
-                <nuxt-link to="/admin/students" class="btn btn-accent"
+                <nuxt-link :to="`/admin/classes/${classe.id}`" class="btn btn-accent"
                   >Cancel</nuxt-link
                 >
               </div>
@@ -141,7 +85,7 @@
                 </div>
                 <div class="list-group-item">
                   <a href="#" class="text-danger"
-                    ><strong>Delete Quiz</strong></a
+                    ><strong>Delete Class</strong></a
                   >
                 </div>
               </div>
@@ -151,11 +95,7 @@
       </div>
     </div>
 
-    <!-- // END Page Content -->
-
-    <!-- Footer -->
-
-    <div class="bg-white border-top-2 mt-auto">
+    <div class="bg-white border-top-2 mt-auto" v-if="!loading">
       <div class="container page__container page-section d-flex flex-column">
         <p class="text-70 brand mb-24pt">
           <img
@@ -181,49 +121,63 @@
         </p>
       </div>
     </div>
+    <div class="container p-4">
+      <loader v-if="loading"></loader>
+    </div>
   </div>
 </template>
 
 <script>
-import TopNavBar from "../../../components/navs/TopNavBar.vue";
 import { mapActions, mapGetters } from "vuex";
-import BreadCrumb from "../../../components/navs/BreadCrumb.vue";
+import Loader from "../../../../components/generic/Loader.vue";
+import BreadCrumb from "../../../../components/navs/BreadCrumb.vue";
+import TopNavBar from "../../../../components/navs/TopNavBar.vue";
+
 export default {
-  components: { TopNavBar, BreadCrumb },
+  components: { TopNavBar, Loader, BreadCrumb, Loader },
   data() {
     return {
-      student: {},
-      phoneNumberValid:false
+      studentClassData: {},
     };
   },
   created() {
-    this.phoneNumberValid = false;
-    console.log(this.phoneNumberValid);
+    // this.getStudentsAction();
+    this.getClassAction();
   },
   computed: {
     ...mapGetters({
-      loadingSave: "student/getLoadingSave",
-      message: "student/getMessage",
-      errors: "student/getErrors",
+      classe: "classe/getClasse",
+      students: "classe/getStudents",
+      loading: "classe/getLoading",
+      message: "classe/getMessage",
+      errors: "classe/getErrors",
+      loadingSave: "classe/getLoadingSave",
     }),
   },
+
   methods: {
     ...mapActions({
-      saveNewStudent: "student/addNewStudent",
+      getStudents: "classe/getStudents",
+      getClasse: "classe/getClasse",
+      addStudentClass: "classe/addStudentClass",
     }),
 
+    getStudentsAction(search, loading) {
+        // this.search(loading, search, this);
+        this.getStudents(search);
+    },
+    setSelected(event){
+      console.log(event);
+      this.studentClassData.student_id = event.id
+    },
+    getClassAction() {
+      this.getClasse(this.$route.params.id);
+    },
+
     submitForm() {
-      this.saveNewStudent(this.student);
+      this.studentClassData.class_id = this.classe.id
+      this.addStudentClass(this.studentClassData);
     },
-
-    changeTel(number, phone){
-      console.log(phone);
-      this.student.phone_number = phone.number
-      this.phoneNumberValid = phone.valid == undefined ? false : phone.valid
-      console.log(this.phoneNumberValid);
-    },
-
-
   },
 };
 </script>

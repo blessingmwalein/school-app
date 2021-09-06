@@ -42,7 +42,7 @@
           </tr>
         </thead>
         <tbody class="list" id="projects">
-          <tr v-for="(student, index) in students" :key="index">
+          <tr v-for="(student, index) in students.data" :key="index">
             <td>
               <div
                 class="media flex-nowrap align-items-center"
@@ -50,20 +50,20 @@
               >
                 <div class="avatar avatar-sm mr-8pt">
                   <span class="avatar-title rounded-circle"
-                    >{{ student.student.first_name.charAt(0)
-                    }}{{ student.student.last_name.charAt(0) }}</span
+                    >{{ student.first_name.charAt(0)
+                    }}{{ student.last_name.charAt(0) }}</span
                   >
                 </div>
                 <div class="media-body">
                   <div class="d-flex flex-column">
                     <small class="js-lists-values-project"
                       ><strong
-                        >{{ student.student.first_name }}
-                        {{ student.student.last_name }}</strong
+                        >{{ student.first_name }}
+                        {{ student.last_name }}</strong
                       ></small
                     >
                     <small class="js-lists-values-location text-50">{{
-                      student.student.user.email
+                      student.user.email
                     }}</small>
                   </div>
                 </div>
@@ -80,7 +80,7 @@
                     <div class="flex d-flex flex-column">
                       <p class="mb-0">
                         <strong class="js-lists-values-lead">{{
-                          student.student.enrollment_number
+                          student.enrollment_number
                         }}</strong>
                       </p>
                     </div>
@@ -91,7 +91,7 @@
             <td>
               <div class="d-flex flex-column">
                 <small class="js-lists-values-budget"
-                  ><strong>{{ student.student.phone_number }}</strong></small
+                  ><strong>{{ student.phone_number }}</strong></small
                 >
               </div>
             </td>
@@ -99,7 +99,7 @@
             <td>
               <div class="d-flex flex-column">
                 <small class="js-lists-values-date"
-                  ><strong>{{ timeSince(new Date(student.student.created_at)) }} ago</strong></small
+                  ><strong>{{ timeSince(new Date(student.created_at)) }} ago</strong></small
                 >
               </div>
             </td>
@@ -131,9 +131,9 @@
         </tbody>
       </table>
     </div>
-    <!-- <div class="card-footer p-8pt" v-if="students.meta">
+    <div class="card-footer p-8pt" v-if="students.meta">
       <pagination :meta="students.meta" :links="students.links"></pagination>
-    </div> -->
+    </div>
   </div>
 </template>
 

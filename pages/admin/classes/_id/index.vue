@@ -10,7 +10,7 @@
         { name: `${classe.name}`, link: '#' },
       ]"
       :actions="[
-        { name: 'Add Student', link: '#' },
+        { name: 'Add Student', link: `/admin/classes/${classe.id}/add-student` },
         { name: 'Delete', link: '#' },
       ]"
     ></bread-crumb>

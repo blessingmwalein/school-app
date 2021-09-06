@@ -41,10 +41,15 @@ export default {
     "~assets/css/material-icons.css",
     "~assets/css/fontawesome.css",
     "~assets/css/preloader.css",
+    "vue-select/dist/vue-select.css",
+    "vue-tel-input/dist/vue-tel-input.css"
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/vue-select.js',
+    '~/plugins/vue-tel-input.js',
+
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
