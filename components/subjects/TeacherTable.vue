@@ -20,6 +20,14 @@
                 >Teacher No</a
               >
             </th>
+            <th>
+              <a
+                href="javascript:void(0)"
+                class="sort"
+                data-sort="js-lists-values-lead"
+                >Class</a
+              >
+            </th>
 
             <th style="">
               <a
@@ -42,30 +50,30 @@
           </tr>
         </thead>
         <tbody class="list" id="projects">
-          <tr v-for="(teacher, index) in teachers.data" :key="index">
+          <tr v-for="(teacher, index) in teachers" :key="index">
             <td>
               <div
                 class="media flex-nowrap align-items-center"
                 style="white-space: nowrap"
               >
-                <div class="avatar avatar-sm mr-8pt">
+                <nuxt-link :to="`/admin/teachers/${teacher.teacher.id}`" class="avatar avatar-sm mr-8pt">
                   <span class="avatar-title rounded-circle"
-                    >{{ teacher.first_name.charAt(0)
-                    }}{{ teacher.last_name.charAt(0) }}</span
+                    >{{ teacher.teacher.first_name.charAt(0)
+                    }}{{ teacher.teacher.last_name.charAt(0) }}</span
                   >
-                </div>
+                </nuxt-link>
                 <div class="media-body">
-                  <div class="d-flex flex-column">
+                  <nuxt-link :to="`/admin/teachers/${teacher.teacher.id}`" class="d-flex flex-column">
                     <small class="js-lists-values-project"
                       ><strong
-                        >{{ teacher.first_name }}
-                        {{ teacher.last_name }}</strong
+                        >{{ teacher.teacher.first_name }}
+                        {{ teacher.teacher.last_name }}</strong
                       ></small
                     >
                     <small class="js-lists-values-location text-50">{{
-                      teacher.user.email
+                      teacher.teacher.user.email
                     }}</small>
-                  </div>
+                  </nuxt-link>
                 </div>
               </div>
             </td>
@@ -80,7 +88,7 @@
                     <div class="flex d-flex flex-column">
                       <p class="mb-0">
                         <strong class="js-lists-values-lead">{{
-                          teacher.teacher_number
+                          teacher.teacher.teacher_number
                         }}</strong>
                       </p>
                     </div>
@@ -91,7 +99,14 @@
             <td>
               <div class="d-flex flex-column">
                 <small class="js-lists-values-budget"
-                  ><strong>{{ teacher.phone_number }}</strong></small
+                  ><strong>{{ teacher.classe.name }}</strong></small
+                >
+              </div>
+            </td>
+            <td>
+              <div class="d-flex flex-column">
+                <small class="js-lists-values-budget"
+                  ><strong>{{ teacher.teacher.phone_number }}</strong></small
                 >
               </div>
             </td>
@@ -99,7 +114,7 @@
             <td>
               <div class="d-flex flex-column">
                 <small class="js-lists-values-date"
-                  ><strong>{{ timeSince(new Date(teacher.created_at)) }} ago</strong></small
+                  ><strong>{{ timeSince(new Date(teacher.teacher.created_at)) }} ago</strong></small
                 >
               </div>
             </td>
@@ -130,9 +145,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-    <div class="card-footer p-8pt" v-if="teachers.meta">
-      <pagination :meta="teachers.meta" :links="teachers.links"></pagination>
     </div>
   </div>
 </template>

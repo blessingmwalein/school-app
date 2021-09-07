@@ -48,14 +48,14 @@
                 class="media flex-nowrap align-items-center"
                 style="white-space: nowrap"
               >
-                <div class="avatar avatar-sm mr-8pt">
+                <nuxt-link :to="`/admin/students/${student.id}`" class="avatar avatar-sm mr-8pt">
                   <span class="avatar-title rounded-circle"
                     >{{ student.first_name.charAt(0)
                     }}{{ student.last_name.charAt(0) }}</span
                   >
-                </div>
+                </nuxt-link>
                 <div class="media-body">
-                  <div class="d-flex flex-column">
+                  <nuxt-link :to="`/admin/students/${student.id}`" class="d-flex flex-column">
                     <small class="js-lists-values-project"
                       ><strong
                         >{{ student.first_name }}
@@ -65,7 +65,7 @@
                     <small class="js-lists-values-location text-50">{{
                       student.user.email
                     }}</small>
-                  </div>
+                  </nuxt-link>
                 </div>
               </div>
             </td>

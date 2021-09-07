@@ -4,10 +4,10 @@
 
     <bread-crumb
       v-if="!loading"
-      :name="'Add Student To Class'"
+      :name="'Add Student To Subject'"
       :links="[
-        { name: `Classes`, link: '/admin/classes' },
-        { name: `${classe.name}`, link: '#' },
+        { name: `Subjects`, link: '/admin/subjects' },
+        { name: `${subject.name}`, link: '#' },
       ]"
     ></bread-crumb>
     <div class="page-section border-bottom-2" v-if="!loading">
@@ -15,7 +15,7 @@
         <div class="row align-items-start">
           <div class="col-md-8">
             <div class="page-separator">
-              <div class="page-separator__text">Class Details</div>
+              <div class="page-separator__text">Subject Details</div>
             </div>
             <div class="card card-body">
               <div class="alert alert-danger" role="alert" v-if="message">
@@ -36,7 +36,7 @@
                 <v-select
                   :options="studentOptions"
                   :label="'item_data'"
-                  @input="setSelected"
+                  @input="setSelectedStudent"
                   @search="getStudentsAction"
                   :filterable="false"
                 ></v-select>
@@ -51,10 +51,10 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label">Class Name</label>
+                <label class="form-label">Subject Name</label>
                 <input
                   type="text"
-                  v-model="classe.name"
+                  v-model="subject.name"
                   placeholder="Class Year"
                   class="form-control"
                   disabled
@@ -81,7 +81,7 @@
             <div class="card">
               <div class="card-header text-right">
                 <nuxt-link
-                  :to="`/admin/classes/${classe.id}`"
+                  :to="`/admin/subjects/${subject.id}`"
                   class="btn btn-accent"
                   >Cancel</nuxt-link
                 >
@@ -143,51 +143,53 @@ import TopNavBar from "../../../../components/navs/TopNavBar.vue";
 
 export default {
   components: { TopNavBar, Loader, BreadCrumb, Loader },
+
   data() {
     return {
-      studentClassData: {},
       studentOptions: [],
+      studentSubjectData: {},
     };
-  },
-  created() {
-    // this.getStudentsAction();
-    this.getClassAction();
   },
   computed: {
     ...mapGetters({
-      classe: "classe/getClasse",
-      students: "classe/getStudents",
-      loading: "classe/getLoading",
-      message: "classe/getMessage",
-      errors: "classe/getErrors",
-      loadingSave: "classe/getLoadingSave",
+      subject: "subject/getSubject",
+      students: "subject/getStudents",
+      loading: "subject/getLoading",
+      errors: "subject/getErrors",
+      loadingSave: "subject/getLoadingSave",
+      message: "subject/getMessage",
     }),
+  },
+  created() {
+    this.getSubjectAction();
   },
 
   methods: {
     ...mapActions({
-      getStudents: "classe/getStudents",
-      getClasse: "classe/getClasse",
-      addStudentClass: "classe/addStudentClass",
+      getSubject: "subject/getSubject",
+      getStudents: "subject/getStudents",
+      addStudentSubject:"subject/addStudentSubject"
     }),
+    getSubjectAction() {
+      this.getSubject(this.$route.params.id);
+    },
 
     getStudentsAction(search, loading) {
       // this.search(loading, search, this);
       this.getStudents(search);
     },
-    setSelected(event) {
+
+    setSelectedStudent(event) {
       console.log(event);
-      this.studentClassData.student_id = event.id;
-    },
-    getClassAction() {
-      this.getClasse(this.$route.params.id);
+      this.studentSubjectData.student_id = event.id;
     },
 
     submitForm() {
-      this.studentClassData.class_id = this.classe.id;
-      this.addStudentClass(this.studentClassData);
+      this.studentSubjectData.subject_id = this.subject.id;
+      this.addStudentSubject(this.studentSubjectData);
     },
   },
+
   watch: {
     students(newState, oldState) {
       this.studentOptions = newState.data.map(function (x) {

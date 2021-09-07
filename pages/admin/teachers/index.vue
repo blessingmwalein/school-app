@@ -62,7 +62,7 @@ import { mapActions, mapGetters } from "vuex";
 import Loader from '../../../components/generic/Loader.vue';
 import BreadCrumb from "../../../components/navs/BreadCrumb.vue";
 import TopNavBar from "../../../components/navs/TopNavBar.vue";
-import TeacherTable from '../../../components/subjects/TeacherTable.vue';
+import TeacherTable from '../../../components/teachers/TeacherTable.vue';
 
 export default {
   components: { BreadCrumb, TeacherTable, TopNavBar,Loader },

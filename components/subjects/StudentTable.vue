@@ -53,7 +53,7 @@
                     >{{ student.student.first_name.charAt(0)
                     }}{{ student.student.last_name.charAt(0) }}</span
                   >
-                </nuxt-link >
+                </nuxt-link>
                 <div class="media-body">
                   <nuxt-link :to="`/admin/students/${student.student.id}`" class="d-flex flex-column">
                     <small class="js-lists-values-project"
@@ -131,9 +131,6 @@
         </tbody>
       </table>
     </div>
-    <!-- <div class="card-footer p-8pt" v-if="students.meta">
-      <pagination :meta="students.meta" :links="students.links"></pagination>
-    </div> -->
   </div>
 </template>
 

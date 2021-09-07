@@ -10,7 +10,8 @@
         { name: `${subject.name}`, link: '#' },
       ]"
       :actions="[
-        { name: 'Add Teacher', link: '#' },
+        { name: 'Add Teacher', link: `/admin/subjects/${subject.id}/add-teacher` },
+        { name: 'Add Stundent', link: `/admin/subjects/${subject.id}/add-student` },
         { name: 'Delete', link: '#' },
       ]"
     ></bread-crumb>
@@ -24,20 +25,15 @@
               <div class="col-lg-9">
                 <div class="row">
                   <div class="col-md-6 mb-24pt mb-lg-0">
+                    <img style="width:100%;" :src="`${imageBaseUrl}${subject.icon}`" alt="">
+                  </div>
+                  <div class="col-md-6">
                     <p class="text-white-70 mb-0">
                       <strong>{{subject.level.name}}</strong>
                     </p>
                     <h2 class="text-white">{{subject.name}}</h2>
                     <p class="text-white">
                      {{subject.teachers.length}} teachers
-                    </p>
-                  </div>
-                  <div class="col-md-6">
-                    <p class="text-white-70 mb-0">
-                      <!-- <strong>Class of</strong> -->
-                    </p>
-                    <!-- <h2 class="text-white">{{subject.year}}</h2> -->
-                    <p class="text-white-50">
                     </p>
                   </div>
                 </div>
@@ -60,10 +56,6 @@
                   </p>
                 </div>
                 <div>
-                  <button class="btn btn-outline-white">
-                    Download
-                    <i class="material-icons icon--right">file_download</i>
-                  </button>
                   <nuxt-link class="btn btn-outline-white mt-2" :to="`/admin/subjects/${subject.id}/edit`">
                     Edit
                     <i class="material-icons icon--right">edit</i>
@@ -80,6 +72,10 @@
           <div class="page-separator__text">Teachers</div>
         </div>
         <teacher-table :teachers="subject.teachers"></teacher-table>
+        <div class="page-separator">
+          <div class="page-separator__text">Students</div>
+        </div>
+        <student-table :students="subject.students"></student-table>
       </div>
     </div>
 
@@ -121,9 +117,10 @@ import { mapActions, mapGetters } from "vuex";
 import Loader from "../../../../components/generic/Loader.vue";
 import BreadCrumb from "../../../../components/navs/BreadCrumb.vue";
 import TeacherTable from '../../../../components/subjects/TeacherTable.vue';
+import StudentTable from '../../../../components/subjects/StudentTable.vue';
 
 export default {
-  components: { TopNavBar, Loader, BreadCrumb, TeacherTable },
+  components: { TopNavBar, Loader, BreadCrumb, TeacherTable, StudentTable },
   created() {
     this.getSubjectAction();
   },
@@ -131,6 +128,7 @@ export default {
     ...mapGetters({
       subject: "subject/getSubject",
       loading: "subject/getLoading",
+      imageBaseUrl:"subject/getImageBaseUrl"
     }),
   },
   methods: {
