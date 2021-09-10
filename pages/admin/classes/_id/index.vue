@@ -114,6 +114,7 @@
     <div class="container p-4">
       <loader v-if="loading"></loader>
     </div>
+    <footer-nav></footer-nav>
   </div>
 </template>
 
@@ -124,9 +125,10 @@ import Loader from "../../../../components/generic/Loader.vue";
 import ClassCard from "../../../../components/classes/ClassCard.vue";
 import BreadCrumb from "../../../../components/navs/BreadCrumb.vue";
 import StudentTable from "../../../../components/classes/StudentTable.vue";
+import FooterNav from '../../../../components/navs/Footer.vue';
 
 export default {
-  components: { TopNavBar, Loader, ClassCard, BreadCrumb, StudentTable },
+  components: { TopNavBar, Loader, ClassCard, BreadCrumb, StudentTable, FooterNav },
   created() {
     this.getClassAction();
   },

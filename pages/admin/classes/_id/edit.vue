@@ -164,6 +164,8 @@
     <div class="container p-4">
       <loader v-if="loading"></loader>
     </div>
+
+    <footer-nav></footer-nav>
   </div>
 </template>
 
@@ -178,9 +180,10 @@ import swal from "sweetalert2";
 
 // style import
 import "sweetalert2/dist/sweetalert2.css";
+import FooterNav from '../../../../components/navs/Footer.vue';
 
 export default {
-  components: { TopNavBar, Loader, BreadCrumb, Loader },
+  components: { TopNavBar, Loader, BreadCrumb, FooterNav, Loader },
   data() {
     return {
       classeData: {},

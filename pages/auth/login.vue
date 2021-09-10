@@ -8,6 +8,8 @@
       <!-- Header -->
 
       <div class="pt-32pt pt-sm-64pt pb-32pt">
+          <h1 class="text-center" >Login</h1>
+
         <div class="container page__container">
           <form class="col-md-12 p-0 mx-auto">
             <div class="alert alert-danger" role="alert" v-if="message">

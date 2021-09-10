@@ -1,47 +1,50 @@
 
 export const state = () => ({
-  token:"",
-  user:{},
+  token: "",
+  user: {},
   userIsLoggedIn: false,
   status: "",
-  loading:false,
-  errors:{},
-  message:""
+  loading: false,
+  errors: {
+    email: [],
+    password: []
+  },
+  message: ""
 
 })
 
 
 export const getters = {
-  getToken:state=> {
+  getToken: state => {
     return state.token
   },
-  getUser:state=>{
+  getUser: state => {
     return state.user
   },
-  getUserIsLoggedIn : state =>{
+  getUserIsLoggedIn: state => {
     return state.userIsLoggedIn
   },
 
-  getErrors:state=>{
+  getErrors: state => {
     return state.errors
   },
 
-  getLoading:state=> {
+  getLoading: state => {
     return state.loading
   },
 
-  getMessage:state=> {
+  getMessage: state => {
     return state.message
   }
 }
 
 export const mutations = {
-  auth_request(state) {
+  authRequest(state) {
     state.status = 'loading'
-    state.loading= true
+    state.loading = true
   },
 
-  auth_success(state,userData) {
+  authSuccess(state, userData) {
     state.status = 'success'
     state.loading = false;
     state.errors = {}
@@ -49,30 +52,34 @@ export const mutations = {
     state.token = userData.token
     state.user = userData.user
     console.log(userData);
-    if(userData.user.role.name == 'admin'){
-      this.$router.push('/admin')
+    if (userData.user.role.name == 'admin') {
+      // this.$router.push('/admin')
+      location.href = '/admin'
     }
   },
-  auth_error(state, error) {
+  authError(state, error) {
     state.status = 'error'
     state.loading = false
-    console.log(error);
-    if(error.response.status == 422){
-      state.errors = error.response.data.errors
+    console.log(error.response);
+    if (error.response.status === 422) {
       state.message = error.response.data.message
-     }
+      error.response.data.errors ? state.errors = error.response.data.errors : state.errors = { email: [], password: [] }
+    }
   },
-  logout(state) {
+  logOut(state) {
     state.status = ''
-    state.token = {}
+    state.token = ''
+    state.user ={}
+    location.reload();
   },
-  setUser(state, user){
-    state.user = user
+  setUser(state, user) {
+    state.user = user;
+    state.userIsLoggedIn = true
   }
 }
 export const actions = {
   async login({ commit }, user) {
-    commit('auth_request')
+    commit('authRequest')
     try {
       const userData = await this.$axios.$post('/user/login', user);
 
@@ -80,11 +87,17 @@ export const actions = {
 
       this.$cookies.set('token', userData.token);
       this.$cookies.set('user', userData.user)
-      commit('auth_success', userData)
+      commit('authSuccess', userData)
     } catch (error) {
-      commit('auth_error', error)
+      commit('authError', error)
     }
-  }
+  },
+
+  logOut({ commit }) {
+    this.$cookies.remove('user')
+    this.$cookies.remove('token')
+    commit('logOut')
+  },
 }
 
 
