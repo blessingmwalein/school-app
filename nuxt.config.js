@@ -30,7 +30,7 @@ export default {
   },
 
   axios: {
-    baseURL: 'http://127.0.0.1:8000/api/v1'
+    baseURL: 'https://learn.kamifatech.co.zw/api/v1'
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

@@ -6,7 +6,7 @@ export const state = () => ({
   errors: {},
   message: "",
   student: {},
-  baseImageUrl: 'http://127.0.0.1:8000/storage/student/'
+  baseImageUrl: 'https://learn.kamifatech.co.zw/storage/student/'
 })
 
 export const getters = {
@@ -69,7 +69,7 @@ export const mutations = {
     state.errors={};
     state.message=""
     succesAlert(``, `Record Updated Success`);
-    this.$router.push(`/admin/students`)
+    this.$router.push(`/admin/students/${data.data.id}`)
   },
   saveLoadingState(state) {
     state.loadingSave = true
@@ -116,7 +116,7 @@ export const actions = {
     commit('saveLoadingState')
     try {
       this.$axios.setToken(this.$cookies.get('token'), 'Bearer');
-      const data = await this.$axios.put(`/students/update/${student.id}`, { name: student.name, year: student.year, level_id: student.level_id });
+      const data = await this.$axios.put(`/students/${student.id}`, { first_name: student.first_name,last_name: student.last_name, phone_number: student.phone_number });
       commit('success', data.data)
     } catch (error) {
       commit('error', error)

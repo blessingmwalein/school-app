@@ -6,7 +6,7 @@ export const state = () => ({
   errors: {},
   message: "",
   teacher: {},
-  baseImageUrl: 'http://127.0.0.1:8000/storage/teacher/'
+  baseImageUrl: 'https://learn.kamifatech.co.zw/storage/teacher/'
 })
 
 export const getters = {
@@ -66,10 +66,10 @@ export const mutations = {
 
   success(state, data) {
     state.loadingSave = false
-    state.errors={};
-    state.message=""
+    state.errors = {};
+    state.message = ""
     succesAlert(``, `Record Updated Success`);
-    this.$router.push(`/admin/teachers`)
+    this.$router.push(`/admin/teachers/${data.data.id}`)
   },
   saveLoadingState(state) {
     state.loadingSave = true
@@ -94,8 +94,8 @@ export const actions = {
     commit('saveLoadingState')
     try {
       this.$axios.setToken(this.$cookies.get('token'), 'Bearer');
-      const data = await this.$axios.post('/teachers', {first_name:teacher.first_name,last_name:teacher.last_name, phone_number:teacher.phone_number,email:teacher.email});
-      commit('success',  data.data)
+      const data = await this.$axios.post('/teachers', { first_name: teacher.first_name, last_name: teacher.last_name, phone_number: teacher.phone_number, email: teacher.email });
+      commit('success', data.data)
     } catch (error) {
       commit('error', error)
     }
@@ -116,7 +116,7 @@ export const actions = {
     commit('saveLoadingState')
     try {
       this.$axios.setToken(this.$cookies.get('token'), 'Bearer');
-      const data = await this.$axios.put(`/teachers/${teacher.id}`, { name: teacher.name, year: teacher.year, level_id: teacher.level_id });
+      const data = await this.$axios.put(`/teachers/${teacher.id}`, { first_name: teacher.first_name, last_name: teacher.last_name, phone_number: teacher.phone_number });
       commit('success', data.data)
     } catch (error) {
       commit('error', error)

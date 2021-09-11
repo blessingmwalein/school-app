@@ -4,10 +4,10 @@
 
     <bread-crumb
       v-if="!loading"
-      :name="'Edit Student'"
+      :name="'Edit Teacher'"
       :links="[
-        { name: 'Students', link: 'admin/students' },
-        { name: `${student.name}`, link: '#' },
+        { name: 'teachers', link: 'admin/teachers' },
+        { name: `${teacher.name}`, link: '#' },
       ]"
     ></bread-crumb>
     <div class="page-section border-bottom-2" v-if="!loading">
@@ -15,7 +15,7 @@
         <div class="row align-items-start">
           <div class="col-md-8">
             <div class="page-separator">
-              <div class="page-separator__text">Student Details</div>
+              <div class="page-separator__text">Teacher Details</div>
             </div>
             <div class="card card-body">
               <div class="alert alert-danger" role="alert" v-if="message">
@@ -35,7 +35,7 @@
                 <label class="form-label">First Name</label>
                 <input
                   type="text"
-                  v-model="studentData.first_name"
+                  v-model="teacherData.first_name"
                   placeholder="First Name"
                   class="form-control"
                 />
@@ -53,7 +53,7 @@
                 <label class="form-label">Last Name</label>
                 <input
                   type="text"
-                  v-model="studentData.last_name"
+                  v-model="teacherData.last_name"
                   placeholder="Last Name"
                   class="form-control"
                 />
@@ -71,7 +71,7 @@
                 <label class="form-label">Email</label>
                 <input
                   type="text"
-                  v-model="studentData.user.email"
+                  v-model="teacherData.user.email"
                   placeholder="Email"
                   class="form-control"
                 />
@@ -89,7 +89,7 @@
                 <label class="form-label">Phone Number</label>
 
                 <vue-tel-input
-                  v-model="studentData.phone_number"
+                  v-model="teacherData.phone_number"
                   @input="changeTel"
                 ></vue-tel-input>
 
@@ -123,7 +123,7 @@
                   class="btn btn-secondary"
                   disabled
                 >
-                  Add student
+                  Add teacher
                 </button>
                 <a
                   href="#"
@@ -133,106 +133,13 @@
                 >
               </div>
             </div>
-            <div class="page-separator">
-              <div class="page-separator__text">Student Home Details</div>
-            </div>
-            <div class="card card-body">
-              <div class="form-group">
-                <label class="form-label">Guiden Name</label>
-                <input
-                  type="text"
-                  v-model="studentHomeDetails.guiden_name"
-                  placeholder="First Name"
-                  class="form-control"
-                />
-                <div v-if="errors.guiden_name">
-                  <div
-                    class="invalid-feedback"
-                    v-for="(error, index) in errors.guiden_name"
-                    :key="index"
-                  >
-                    {{ error }}
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Address</label>
-                <textarea
-                  name=""
-                  id=""
-                  v-model="studentHomeDetails.address"
-                  rows="4"
-                  class="form-control"
-                ></textarea>
-                <div v-if="errors.address">
-                  <div
-                    class="invalid-feedback"
-                    v-for="(error, index) in errors.address"
-                    :key="index"
-                  >
-                    {{ error }}
-                  </div>
-                </div>
-              </div>
 
-              <div class="form-group">
-                <label class="form-label">Home Contact</label>
-                <vue-tel-input
-                  v-model="studentHomeDetails.home_contact"
-                  @input="changeHomePhone"
-                ></vue-tel-input>
-
-                <div v-if="!homePhoneNumberValid">
-                  <div class="invalid-feedback">
-                    Please Enter Valid Phone Number
-                  </div>
-                </div>
-                <div v-if="errors.home_contact">
-                  <div
-                    class="invalid-feedback"
-                    v-for="(error, index) in errors.home_contact"
-                    :key="index"
-                  >
-                    {{ error }}
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <button
-                  v-if="!loadingSave && homePhoneNumberValid"
-                  class="btn btn-secondary"
-                  @click.prevent="submitForm"
-                >
-                  Update Changes
-                </button>
-
-                <button
-                  v-if="!loadingSave && !homePhoneNumberValid"
-                  class="btn btn-secondary"
-                  disabled
-                >
-                  Update Changes
-                </button>
-                <a
-                  href="#"
-                  v-if="loadingSave"
-                  class="btn btn-primary is-loading is-loading-sm"
-                  >...loading</a
-                >
-              </div>
-            </div>
           </div>
           <div class="col-md-4">
             <div class="card">
               <div class="card-header text-right">
-                <button
-                  v-if="student.home.length <= 0"
-                  class="btn btn-secondary"
-                >
-                  Add Home Details
-                </button>
-                <nuxt-link v-else to="/admin/students" class="btn btn-accent"
+
+                <nuxt-link to="/admin/teachers" class="btn btn-accent"
                   >Cancel</nuxt-link
                 >
               </div>
@@ -266,7 +173,7 @@
         </p>
         <p class="measure-lead-max text-50 small mr-8pt">
           Luma is a beautifully crafted user interface for modern Education
-          Platforms, including Courses & Tutorials, Video Lessons, Student and
+          Platforms, including Courses & Tutorials, Video Lessons, teacher and
           Teacher Dashboard, Curriculum Management, Earnings and Reporting, ERP,
           HR, CMS, Tasks, Projects, eCommerce and more.
         </p>
@@ -293,61 +200,61 @@ export default {
   components: { TopNavBar, BreadCrumb, Loader },
   data() {
     return {
-      studentData: {},
+      teacherData: {},
       phoneNumberValid: false,
       homePhoneNumberValid: false,
-      studentHomeDetails: {},
+      teacherHomeDetails: {},
     };
   },
   created() {
     this.phoneNumberValid = false;
-    this.getStudentAction();
+    this.getTeacherAction();
   },
   computed: {
     ...mapGetters({
-      loadingSave: "student/getLoadingSave",
-      message: "student/getMessage",
-      errors: "student/getErrors",
-      student: "student/getStudent",
-      loading: "student/getLoading",
+      loadingSave: "teacher/getLoadingSave",
+      message: "teacher/getMessage",
+      errors: "teacher/getErrors",
+      teacher: "teacher/getTeacher",
+      loading: "teacher/getLoading",
     }),
   },
   methods: {
     ...mapActions({
-      updateStudent: "student/updateStudent",
-      getStudent: "student/getStudent",
+      updateTeacher: "teacher/updateTeacher",
+      getTeacher: "teacher/getTeacher",
     }),
 
-    getStudentAction() {
-      this.getStudent(this.$route.params.id);
+    getTeacherAction() {
+      this.getTeacher(this.$route.params.id);
     },
 
     submitForm() {
-      this.updateStudent(this.studentData);
+      this.updateTeacher(this.teacherData);
     },
 
     changeTel(number, phone) {
       console.log(phone);
-      this.studentData.phone_number = phone.number;
+      this.teacherData.phone_number = phone.number;
       this.phoneNumberValid = phone.valid == undefined ? false : phone.valid;
       console.log(this.phoneNumberValid);
     },
 
     changeHomePhone(number, phone) {
-      this.studentHomeDetails.phone_number = phone.number;
+      this.teacherHomeDetails.phone_number = phone.number;
       this.homePhoneNumberValid =
         phone.valid == undefined ? false : phone.valid;
     },
   },
   watch: {
-    student(value) {
-      this.studentData = { ...value };
+    teacher(value) {
+      this.teacherData = { ...value };
       // if (value.home.length <= 0) {
-      //   (this.studentHomeDetails.guiden_name = ""),
-      //     (this.studentHomeDetails.address = ""),
-      //     (this.studentHomeDetails.home_contact = "");
+      //   (this.teacherHomeDetails.guiden_name = ""),
+      //     (this.teacherHomeDetails.address = ""),
+      //     (this.teacherHomeDetails.home_contact = "");
       // } else {
-      //   this.studentHomeDetails = { ...value.home[0] };
+      //   this.teacherHomeDetails = { ...value.home[0] };
       // }
     },
   },

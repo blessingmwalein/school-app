@@ -47,7 +47,7 @@
                 >
               </p>
             </div>
-            <a href="#" class="btn btn-outline-white">Edit</a>
+            <nuxt-link :to="`/admin/teachers/${teacher.id}/edit`" class="btn btn-outline-white">Edit</nuxt-link>
           </div>
         </div>
         <div class="page-section">
