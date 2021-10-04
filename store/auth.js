@@ -57,6 +57,9 @@ export const mutations = {
       location.href = '/admin'
     }
   },
+  setPasswordSuccess(state,userData){
+
+  },
   authError(state, error) {
     state.status = 'error'
     state.loading = false
@@ -87,6 +90,16 @@ export const actions = {
 
       this.$cookies.set('token', userData.token);
       this.$cookies.set('user', userData.user)
+      commit('authSuccess', userData)
+    } catch (error) {
+      commit('authError', error)
+    }
+  },
+
+  async resetPassword({ commit }, user) {
+    commit('authRequest')
+    try {
+      const userData = await this.$axios.$post('/user/reset-password', user);
       commit('authSuccess', userData)
     } catch (error) {
       commit('authError', error)

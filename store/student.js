@@ -6,7 +6,7 @@ export const state = () => ({
   errors: {},
   message: "",
   student: {},
-  baseImageUrl: 'https://learn.kamifatech.co.zw/storage/student/'
+  baseImageUrl: ' http://127.0.0.1:8000/storage/student/'
 })
 
 export const getters = {

@@ -6,7 +6,7 @@ export const state = () => ({
   errors: {},
   message: "",
   teacher: {},
-  baseImageUrl: 'https://learn.kamifatech.co.zw/storage/teacher/'
+  baseImageUrl: ' http://127.0.0.1:8000/storage/teacher/'
 })
 
 export const getters = {
@@ -57,7 +57,6 @@ export const mutations = {
     state.loading = false;
     state.loadingSave = false
     console.log(error);
-
     if (error.response.status == 422) {
       state.errors = error.response.data.errors
       state.message = error.response.data.message
